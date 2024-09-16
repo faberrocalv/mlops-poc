@@ -1,0 +1,22 @@
+services:
+  jenkins:
+    build: ./docker/jenkins
+    ports:
+      - "8081:8080"
+      - "50000:50000"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock  # Acceso al Docker del host
+      - jenkins_home:/var/jenkins_home
+    restart: on-failure
+
+  fastapi:
+    build: ./docker/fastapi
+    ports:
+      - "8000:8000"
+    volumes:
+      - jenkins_home:/app/jenkins_data
+    restart: on-failure
+
+
+volumes:
+  jenkins_home:
